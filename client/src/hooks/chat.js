@@ -1,6 +1,9 @@
+import { useState } from "react"
 
 
 export default function useChat(){
+    
+    const [loading, setLoading] = useState(false)
 
     const getResponse = async (text) => {
 
@@ -24,11 +27,13 @@ export default function useChat(){
             alert( `An error has ocurred ${res.status}`)
         }
         else{
+            setLoading(true)
             let data = await res.json()
+            setLoading(false)
             return data
         }
     } 
 
 
-    return{getResponse}
+    return{getResponse,loading}
 }
