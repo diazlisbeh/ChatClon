@@ -1,10 +1,13 @@
 import { useState } from "react"
+import { useSelector, useDispatch } from 'react-redux'
+import { addMessage, setAllMessages, setLoading } from '../store/chatSlice'
 
 
 export default function useChat(){
     
-    const [loading, setLoading] = useState(false)
-
+    const loading = useSelector((state) => state.chat.loading)
+    const messages = useSelector((state) => state.chat.messages)
+    const dispatch = useDispatch()
     const getResponse = async (text) => {
 
         let res = await fetch("http://localhost:1234/v1/chat/completions",{
@@ -27,10 +30,8 @@ export default function useChat(){
             alert( `An error has ocurred ${res.status}`)
         }
         else{
-            setLoading(true)
             let data = await res.json()
-            setLoading(false)
-            return data
+            dispatch(addMessage({text:data.choices[0].message.content,isUser:false}))
         }
     } 
 

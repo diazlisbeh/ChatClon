@@ -10,25 +10,31 @@ import bar from './assets/bar.svg'
 import newIcon from './assets/new.svg'
 import { useReducer } from 'react'
 import ChatHistory from './components/chat-history'
+import { useSelector, useDispatch } from 'react-redux'
+import { addMessage, setLoading } from './store/chatSlice'
 
 function App() {
 
 
-  const [messages, setMessages] = useState([])
+  // const [messages, setMessages] = useState([])
   const [text, setText] = useState('')
-  const { getResponse, loading } = useChat()
+  const { getResponse } = useChat()
   const [open, setOpen] = useState(true)
   const [conversations, setConversation] = useState()
-
+  const messages = useSelector((state) => state.chat.messages)
+  const loading = useSelector((state) => state.chat.loading)
+  const dispatch = useDispatch()
 
   const sendText = async (e) => {
 
-    setMessages((messages) => [...messages, { text: text, isUser: true }])
+    // setMessages((messages) => [...messages, { text: text, isUser: true }])
     console.log(loading)
-    let r = await getResponse(text)
+    dispatch(setLoading(true))
+    await getResponse(text)
+    dispatch(setLoading(false))
     console.log(loading)
-    console.log(r.choices[0].message.content)
-    setMessages((messages) => [...messages, { text: r.choices[0].message.content, isUser: false }]);
+    console.log(messages)
+    // setMessages((messages) => [...messages, { text: r.choices[0].message.content, isUser: false }]);
 
     setText('')
 
