@@ -4,7 +4,7 @@ export const chatSlice = createSlice({
     name:'chat',
     initialState:{
         messages:[],
-        loading:false
+        loading: false
     },
     reducers:{
         addMessage:(state,action)=>{

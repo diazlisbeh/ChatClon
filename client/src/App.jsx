@@ -27,18 +27,16 @@ function App() {
 
   const sendText = async (e) => {
 
-    // setMessages((messages) => [...messages, { text: text, isUser: true }])
+    dispatch(addMessage({ text: text, isUser: true, loading: false }))
     console.log(loading)
     dispatch(setLoading(true))
     await getResponse(text)
     dispatch(setLoading(false))
     console.log(loading)
     console.log(messages)
-    // setMessages((messages) => [...messages, { text: r.choices[0].message.content, isUser: false }]);
 
     setText('')
 
-    // setMessages([...messages,{text:r.choices[0].message.content,isUser:false}])
   }
 
   const onEnter = (e) => {
@@ -83,7 +81,18 @@ function App() {
           </div>
           <div className='flex flex-col justify-between h-full'>
 
-            {messages.length == 0 ? <InitPage /> : <div className={`overflow-auto max-h-[calc(100vh-10rem)] mx-5`}> {messages.map((m) => <ChatBurbble text={m.text} isUser={m.isUser} loading={loading} />)}</div>}
+            {messages.length == 0 ?
+              <InitPage /> :
+              <div className={`overflow-auto max-h-[calc(100vh-10rem)] mx-5`}> {messages.map((m) =>
+                m.loading ?
+
+                  <div class='flex space-x-2 justify-center items-center my-2'>
+                    <span class='sr-only'>Loading...</span>
+                    <div class='h-4 w-4 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                    <div class='h-4 w-4 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                    <div class='h-4 w-4 bg-gray-400 rounded-full animate-bounce'></div>
+                  </div> :
+                  <ChatBurbble text={m.text} isUser={m.isUser} />)}</div>}
 
             <div className='flex '>
               <input className=' m-3 w-full min-h-9 p-4 break-words border border-gray-300 rounded-lg bg-gray-400 focus:bg-gray-200 focus:ring-blue-500 focus:border-blue-500'
