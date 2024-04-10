@@ -30,7 +30,9 @@ export default function useChat() {
                 alert(`An error has ocurred ${res.status}`)
             }
             else {
+                dispatch(setLoading(true))
                 let data = await res.json()
+                dispatch(setLoading(false))
                 dispatch(addMessage({ text: data.choices[0].message.content, isUser: false,loading:loading }))
             }
         } catch (error) {

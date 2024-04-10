@@ -12,6 +12,7 @@ import { useReducer } from 'react'
 import ChatHistory from './components/chat-history'
 import { useSelector, useDispatch } from 'react-redux'
 import { addMessage, setLoading } from './store/chatSlice'
+import Loading from './components/loading'
 
 function App() {
 
@@ -25,13 +26,13 @@ function App() {
   const loading = useSelector((state) => state.chat.loading)
   const dispatch = useDispatch()
 
-  const sendText = async (e) => {
+  const sendText =  (e) => {
 
-    dispatch(addMessage({ text: text, isUser: true, loading: false }))
+    dispatch(addMessage({ text: text, isUser: true }))
     console.log(loading)
-    dispatch(setLoading(true))
-    await getResponse(text)
-    dispatch(setLoading(false))
+    // dispatch(setLoading(true))
+    getResponse(text)
+    // dispatch(setLoading(false))
     console.log(loading)
     console.log(messages)
 
@@ -83,15 +84,10 @@ function App() {
 
             {messages.length == 0 ?
               <InitPage /> :
-              <div className={`overflow-auto max-h-[calc(100vh-10rem)] mx-5`}> {messages.map((m) =>
-                m.loading ?
+              <div className={`overflow-auto max-h-[calc(100vh-10rem)] mx-5`}> {messages.map((m, i) =>
+                i == messages.length - 1 && loading ?
 
-                  <div class='flex space-x-2 justify-center items-center my-2'>
-                    <span class='sr-only'>Loading...</span>
-                    <div class='h-4 w-4 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-                    <div class='h-4 w-4 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]'></div>
-                    <div class='h-4 w-4 bg-gray-400 rounded-full animate-bounce'></div>
-                  </div> :
+                  <Loading  isUser={false}></Loading> :
                   <ChatBurbble text={m.text} isUser={m.isUser} />)}</div>}
 
             <div className='flex '>

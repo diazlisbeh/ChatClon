@@ -18,6 +18,9 @@ export const chatSlice = createSlice({
         },
         clearMessages:(state)=>{  
             state.messages = []
+        },
+        updateMessage:(state,action) =>{
+            
         }
     }
 })
