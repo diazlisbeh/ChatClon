@@ -26,19 +26,20 @@ function App() {
   const loading = useSelector((state) => state.chat.loading)
   const dispatch = useDispatch()
 
-  const sendText =  (e) => {
-
+  const sendText = async (e) => {
     dispatch(addMessage({ text: text, isUser: true }))
-    console.log(loading)
-    // dispatch(setLoading(true))
-    getResponse(text)
-    // dispatch(setLoading(false))
-    console.log(loading)
-    console.log(messages)
 
+    dispatch(setLoading(true))
+    let response = getResponse(text)
+    // dispatch(setLoading(false))
+    console.log(messages)
     setText('')
 
+
   }
+
+  const formattext = () => {
+   }
 
   const onEnter = (e) => {
     if (e.key == 'Enter') {
@@ -85,22 +86,22 @@ function App() {
             {messages.length == 0 ?
               <InitPage /> :
               <div className={`overflow-auto max-h-[calc(100vh-10rem)] mx-5`}> {messages.map((m, i) =>
-                i == messages.length - 1 && loading ?
 
-                  <Loading  isUser={false}></Loading> :
-                  <ChatBurbble text={m.text} isUser={m.isUser} />)}</div>}
+                <ChatBurbble text={m.text} isUser={m.isUser} />)}</div>}
+            {loading && <div className='overflow-auto max-h-[calc(100vh-10rem)] mx-5'><Loading isUser={false} /></div>}
 
             <div className='flex '>
               <input className=' m-3 w-full min-h-9 p-4 break-words border border-gray-300 rounded-lg bg-gray-400 focus:bg-gray-200 focus:ring-blue-500 focus:border-blue-500'
                 type='text' value={text}
-                // onChange={(e) => setText(e.target.vale)}
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => onEnter(e)}
-
               ></input>
               <img className='w-8 mr-3'
                 src={sendIcon}
-                onClick={sendText}
+                onClick={(e) => {
+
+                  sendText(e);
+                }}
               >
               </img>
             </div>
